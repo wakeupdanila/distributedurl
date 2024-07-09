@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Table
 @Data
 public class Url {
-    
+
     @PrimaryKey
     private long Id;
 
