@@ -5,23 +5,35 @@ services:
     hostname: cass1
     mem_limit: 2g  # It's not strictly required, but it's better to have some memory limit
     healthcheck:
-        test: ["CMD", "cqlsh", "-e", "describe keyspaces" ]
-        interval: 5s
-        timeout: 5s
-        retries: 60
+      test: [ "CMD", "cqlsh", "-e", "describe keyspaces" ]
+      interval: 5s
+      timeout: 5s
+      retries: 60
     networks:
       - app-network
     volumes:
       - cassandra-data:/var/lib/cassandra    # This is the volume that will persist data for cass1 node
       - ./etc/cass1:/etc/cassandra   # Use your own config files for full control
     environment: &environment    # Declare and save environments variables into "environment"
-        CASSANDRA_SEEDS: "cass1"    # The first two nodes will be seeds
-        CASSANDRA_CLUSTER_NAME: SolarSystem
-        CASSANDRA_DC: Mars
-        CASSANDRA_RACK: West
-        CASSANDRA_ENDPOINT_SNITCH: GossipingPropertyFileSnitch
-        CASSANDRA_NUM_TOKENS: 128
+      CASSANDRA_SEEDS: "cass1"    # The first two nodes will be seeds
+      CASSANDRA_CLUSTER_NAME: SolarSystem
+      CASSANDRA_DC: Mars
+      CASSANDRA_RACK: West
+      CASSANDRA_ENDPOINT_SNITCH: GossipingPropertyFileSnitch
+      CASSANDRA_NUM_TOKENS: 128
+  shortener_service:
+    build: distributedurl_shortener
+    container_name: distributedurl_shortener
+    hostname: distributedurl_shortener
+    networks:
+      - app-network
+    depends_on:
+      cass1:
+        condition: service_healthy
+    ports:
+      - 8080:8080
 volumes:
   cassandra-data:
 networks:
   app-network:
+
