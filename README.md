@@ -16,7 +16,7 @@ docker exec -it cass1 bash -c "cqlsh -u cassandra -p cassandra";
 ```
 ## Preview cassandra database
 ```bash
-SELECT * FROM spring_cassandra.url
+SELECT * FROM spring_cassandra.url;
 ```
 ## Create cassandra keyspace
 ```bash
