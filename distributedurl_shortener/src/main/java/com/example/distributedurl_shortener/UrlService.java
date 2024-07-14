@@ -15,13 +15,13 @@ import java.util.List;
 public class UrlService {
     private final UrlRepository urlRepository;
 
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaTemplate<String, KafkaMessage> kafkaTemplate;
 
-    private void sendMessage(String msg) {
-        kafkaTemplate.send("urls.forbidden", msg);
+    private void sendMessage(Url url, String word) {
+        kafkaTemplate.send("urls.forbidden", url.getId(), new KafkaMessage(url.getLastAccess(), word));
     }
 
-    public UrlService(UrlRepository urlRepository, KafkaTemplate<String, String> kafkaTemplate) {
+    public UrlService(UrlRepository urlRepository, KafkaTemplate<String, KafkaMessage> kafkaTemplate) {
         this.urlRepository = urlRepository;
         this.kafkaTemplate = kafkaTemplate;
     }
@@ -37,6 +37,7 @@ public class UrlService {
         url.setId(id);
         url.setLastAccess(LocalDateTime.now());
         urlRepository.save(url);
+        checkUrl(url);
         return true;
     }
 
@@ -44,7 +45,8 @@ public class UrlService {
         for (String word : forbiddenWords) {
 
             if (url.getUrl().toLowerCase().contains(word)) {
-
+                sendMessage(url, word);
+                return;
             }
         }
     }
