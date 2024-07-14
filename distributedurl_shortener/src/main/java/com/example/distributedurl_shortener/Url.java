@@ -3,6 +3,7 @@ package com.example.distributedurl_shortener;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
+import org.springframework.data.cassandra.core.mapping.SASI;
 import org.springframework.data.cassandra.core.mapping.Table;
 
 import java.time.LocalDateTime;
@@ -26,5 +27,6 @@ public class Url {
     private String url;
 
     @JsonView(FullView.class)
+    @SASI(indexMode = SASI.IndexMode.SPARSE)
     private LocalDateTime lastAccess;
 }

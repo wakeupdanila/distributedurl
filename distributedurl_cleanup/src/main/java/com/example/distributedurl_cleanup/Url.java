@@ -1,4 +1,4 @@
-package com.example.distributedurl_redirection;
+package com.example.distributedurl_cleanup;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
@@ -14,10 +14,8 @@ public class Url {
     public interface UserView {
     }
 
-
     public interface FullView extends UserView {
     }
-
 
     @PrimaryKey
     @JsonView(UserView.class)
