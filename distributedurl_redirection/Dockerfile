@@ -5,7 +5,7 @@ RUN gradle build --no-daemon
 
 FROM eclipse-temurin:17-jre
 
-EXPOSE 8080
+EXPOSE 8081
 
 RUN mkdir /app
 

@@ -26,6 +26,7 @@ public class UrlController {
         }
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
+                .port(8081)
                 .path("/{id}")
                 .buildAndExpand(newUrl.getId()).toUri();
 

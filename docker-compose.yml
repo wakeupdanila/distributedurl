@@ -32,6 +32,17 @@ services:
         condition: service_healthy
     ports:
       - 8080:8080
+  redirection_service:
+    build: distributedurl_redirection
+    container_name: distributedurl_redirection
+    hostname: distributedurl_redirection
+    networks:
+      - app-network
+    depends_on:
+      cass1:
+        condition: service_healthy
+    ports:
+      - 8081:8081
 volumes:
   cassandra-data:
 networks:
