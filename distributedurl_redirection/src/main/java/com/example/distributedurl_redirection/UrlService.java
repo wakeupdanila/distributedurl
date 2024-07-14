@@ -2,6 +2,7 @@ package com.example.distributedurl_redirection;
 
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 
@@ -14,6 +15,11 @@ public class UrlService {
     }
 
     public Optional<Url> getUrl(String Id) {
+        Optional<Url> url = urlRepository.findById(Id);
+        if (url.isPresent()) {
+            url.get().setLastAccess(LocalDateTime.now());
+            urlRepository.save(url.get());
+        }
         return urlRepository.findById(Id);
     }
 }
